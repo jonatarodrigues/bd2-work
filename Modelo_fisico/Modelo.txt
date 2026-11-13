@@ -1,14 +1,19 @@
 Tabelas Sistema de Aluguel de Equipamentos Médicos:
 
 1. Equipamentos
+	Cod_equipamento [pk], Nome, Modelo, Peso, Fornecedor (Cod_fornecedor [fk]), Fabricante, Data Aquisição, Valor, Cod_cliente [fk], Status, Cod_Valores [fk]
 
 2. Fornecedores
+	Cod_fornecedor [pk], Nome, UF, Telefone, Email, Cod_equipamento, ranking, cnpj
 
 3. Clientes
+	Cod_cliente [pk], Nome, Telefone, E-mail, Senha, Cod_contrato, Data Cadastro, Data Nascimento, Cpf / Cnpj, Inscrição Estadual
 
 4. Financeiro (Equipamentos e Locações/Contratos)
 
+
 5. Controle de Locação/Contratos
+	
 
 6. Funcionários
 
@@ -19,3 +24,5 @@ Tabelas Sistema de Aluguel de Equipamentos Médicos:
 9. Chamados/Suporte
 
 10. Logística
+
+11. Valores Locação
