@@ -1,1 +1,21 @@
+Tabelas Sistema de Aluguel de Equipamentos Médicos:
 
+1. Equipamentos
+
+2. Fornecedores
+
+3. Clientes
+
+4. Financeiro (Equipamentos e Locações/Contratos)
+
+5. Controle de Locação/Contratos
+
+6. Funcionários
+
+7. Manutenções
+
+8. Orçamentos
+
+9. Chamados/Suporte
+
+10. Logística
