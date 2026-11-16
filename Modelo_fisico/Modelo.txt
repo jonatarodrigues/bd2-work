@@ -11,12 +11,13 @@ Aquisição date, Valor numeric(10,2), Cod_cliente [fk] smallint, Status boolean
 	Cod_cliente [pk] smallint, Nome varchar(50), Telefone varchar(15), E-mail varchar(50), Senha varchar(30), Cod_contrato smallint, Data Cadastro date, Data Nascimento date, Cpf / Cnpj varchar(14), Inscrição Estadual varchar(20)
 
 4. Financeiro (Equipamentos e Locações/Contratos)
-
+ cod_contrato, data_inicio_contrato, data_fim_contrato, cod_equipamento, cod_cliente, cod_fornecedor
 
 5. Controle de Locação/Contratos
 	
 
 6. Funcionários
+	cod_funcionario, nome_funcionario, data_contratacao, data_nasc funcionario, funcao, descricao_funcao, remuneracao
 
 7. Manutenções
 
