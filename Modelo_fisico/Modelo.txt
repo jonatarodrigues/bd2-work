@@ -15,16 +15,20 @@ Aquisição date, Valor numeric(10,2), Cod_cliente [fk] smallint, Status boolean
 
 5. Controle de Locação/Contratos
 	
-
 6. Funcionários
 	cod_funcionario, nome_funcionario, data_contratacao, data_nasc funcionario, funcao, descricao_funcao, remuneracao
 
 7. Manutenções
+	cod_equip_manutencao, cod_equipamento, data_entrada_manutencao, data_saida_manutencao, motivo_manutencao
 
 8. Orçamentos
+	cod_orcamento, valor_orcamento, descricao, valor_previsto, valor_total_gasto, valor_nao_gasto
 
 9. Chamados/Suporte
+	cod_ticket, descricao_ticket, cod_cliente, data_abertura_ticket, data_fechamento_ticket
 
 10. Logística
 
+
 11. Valores Locação
+	cod_valoresL, cod_contrato, valor_locacao, data_inicio_locacao, data_fim_locacao
