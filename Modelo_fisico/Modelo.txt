@@ -1,34 +1,37 @@
 Tabelas Sistema de Aluguel de Equipamentos Médicos:
 
 1. Equipamentos
-	Cod_equipamento [pk] smallint, Nome varchar(50), Modelo varchar(50), Peso tinyint, Fornecedor (Cod_fornecedor [fk]) Varchar(50), Fabricante varchar(50), Data 
-Aquisição date, Valor numeric(10,2), Cod_cliente [fk] smallint, Status boolean, Cod_Valores [fk] smallint
+cod_equipamento [pk] int, nome varchar(50), modelo varchar(50), fabricante varchar(50), numero_serie varchar(30) [unique],  peso_kg numeric(8,2), data_aquisicao date, valor_aquisicao numeric(10,2), data_ultima_calibracao date, data_proxima_calibracao date, status varchar(15) (disponível / locado / manutenção ), cod_fornecedor [fk] smallint
 
 2. Fornecedores
-	Cod_fornecedor [pk] smallint, Nome Varchar(50), UF char(2), Telefone varchar(15), Email varchar(50), Cod_equipamento smallint, ranking, cnpj char(14)
+	cod_fornecedor [pk] smallint, nome varchar(50), cnpj char(14) [unique], uf char(2), telefone varchar(15), email varchar(100), ranking smallint 
 
 3. Clientes
-	Cod_cliente [pk] smallint, Nome varchar(50), Telefone varchar(15), E-mail varchar(50), Senha varchar(30), Cod_contrato smallint, Data Cadastro date, Data Nascimento date, Cpf / Cnpj varchar(14), Inscrição Estadual varchar(20)
+	cod_cliente [pk] int, tipo_pessoa char(1) (F ou J), nome varchar(100), cpf_cnpj varchar(14) [unique], inscricao_estadual varchar(20), data_nascimento date, telefone varchar(15), email varchar(100) [unique], senha varchar(30), cep char(8), logradouro varchar(100), numero varchar(10), complemento varchar(50), bairro varchar(50), cidade varchar(50), uf char(2), data_cadastro date
 
 4. Financeiro (Equipamentos e Locações/Contratos)
- cod_contrato, data_inicio_contrato, data_fim_contrato, cod_equipamento, cod_cliente, cod_fornecedor
+ cod_pagamento [pk] int, cod_contrato [fk] int, valor numeric(10,2), data_vencimento date, data_pagamento date , forma_pagamento varchar(15) , status varchar(15) (pendente / pago / atrasado)
 
 5. Controle de Locação/Contratos
+cod_contrato [pk] int, cod_cliente [fk] int, cod_funcionario [fk] smallint, data_inicio date, data_fim_prevista date, data_devolucao dat, status varchar(15) (ativo / encerrado / atrasado)
+
+5.1 Itens do Contrato
+cod_contrato [pk][fk] int, cod_equipamento [pk][fk] int, valor_acordado numeric(9,2)
 	
 6. Funcionários
-	cod_funcionario, nome_funcionario, data_contratacao, data_nasc funcionario, funcao, descricao_funcao, remuneracao
+	cod_funcionario [pk] smallint, nome_funcionario varchar(50), data_contratacao date,data_demissao date, data_nasc_funcionario date, funcao char(20), descricao_funcao varchar(200), remuneracao numeric(9,2)
 
 7. Manutenções
-	cod_equip_manutencao, cod_equipamento, data_entrada_manutencao, data_saida_manutencao, motivo_manutencao
-
+	cod_manutencao [pk] int, cod_equipamento [fk] int, cod_funcionario [fk] smallint, cod_fornecedor [fk] smallint, tipo varchar(15) (preventiva / corretiva), data_entrada date, data_saida date, motivo varchar(200), custo numeric(9,2)
+ 
 8. Orçamentos
-	cod_orcamento, valor_orcamento, descricao, valor_previsto, valor_total_gasto, valor_nao_gasto
-
+cod_orcamento [pk] smallint, cod_cliente [fk] int, valor_orcamento numeric(9,2), descricao varchar(200), valor_previsto numeric(9,2), valor_total_gasto numeric(9,2)
 9. Chamados/Suporte
-	cod_ticket, descricao_ticket, cod_cliente, data_abertura_ticket, data_fechamento_ticket
+	cod_chamado [pk] int, cod_cliente [fk] int, cod_funcionario [fk] smallint, cod_contrato [fk] int, cod_equipamento [fk] int, descricao varchar(200), prioridade varchar(10) (baixa / moderado / alta / urgente), status varchar(15) (aberto / em andamento / resolvido / fechado), data_abertura datetime, data_fechamento datetime
 
 10. Logística
+cod_entrega [pk] int, cod_contrato [fk] int, cod_funcionario [fk] smallint, tipo varchar(10) (entrega ou retirada), data_prevista date, data_realizada date, cep char(8), endereco varchar(200), cidade varchar(50), uf char(2), observacao varchar(200), status varchar(15) (agendada / em rota / concluída / cancelada)
 
 
 11. Valores Locação
-	cod_valoresL, cod_contrato, valor_locacao, data_inicio_locacao, data_fim_locacao
+    cod_valores [pk] int, cod_equipamento [fk] int, valor_mensal numeric(9,2), vigencia_inicio date, vigencia_fim date
