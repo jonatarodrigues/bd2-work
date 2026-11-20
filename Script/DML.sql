@@ -292,7 +292,10 @@ INSERT INTO manutencoes (cod_equipamento, cod_funcionario, cod_fornecedor, tipo,
   (13, 6, NULL, 'preventiva', '2026-10-06', '2026-10-08', 'Higienização e atualização de firmware', 200.00),
   (10, 7, 3, 'preventiva', '2025-11-25', '2025-11-27', 'Calibração do módulo de ECG', 600.00),
   (12, 8, 2, 'corretiva', '2026-11-10', NULL, 'Motor não atinge a pressão configurada', 420.00),
-  (19, 19, NULL, 'preventiva', '2026-11-12', NULL, 'Calibração anual com simulador de SpO2', 150.00);
+  (19, 19, NULL, 'preventiva', '2026-11-12', NULL, 'Calibração anual com simulador de SpO2', 150.00),
+  (20, 5, 19, 'corretiva', '2026-07-14', '2026-07-23', 'Regulador de pressão com vazamento', 520.00),
+  (16, 6, 10, 'corretiva', '2026-06-08', '2026-06-18', 'Motor de sucção queimado', 460.00),
+  (18, 7, NULL, 'corretiva', '2026-04-06', '2026-04-11', 'Compressor de ar do colchão sem pressão', 310.00);
 GO
 
 INSERT INTO orcamentos (cod_cliente, valor_orcamento, descricao, valor_previsto, valor_total_gasto) VALUES
