@@ -1,48 +1,39 @@
-﻿DROP INDEX IF EXISTS ix_financeiro_em_aberto ON financeiro;
+﻿DROP INDEX IF EXISTS ix_equipamentos_fabricante ON equipamentos;
 GO
-CREATE NONCLUSTERED INDEX ix_financeiro_em_aberto
-    ON financeiro (data_pagamento, data_vencimento)
-    INCLUDE (cod_contrato, valor);
-GO
-
-DROP INDEX IF EXISTS ix_contratos_cliente ON contratos;
-GO
-CREATE NONCLUSTERED INDEX ix_contratos_cliente
-    ON contratos (cod_cliente)
-    INCLUDE (data_devolucao);
+CREATE NONCLUSTERED INDEX ix_equipamentos_fabricante
+    ON equipamentos (fabricante)
+    INCLUDE (status);
 GO
 
-EXEC sp_helpindex financeiro;
-EXEC sp_helpindex contratos;
+EXEC sp_helpindex equipamentos;
+GO
+
+DROP FUNCTION IF EXISTS fn_percentual;
+GO
+CREATE FUNCTION fn_percentual (@parte int, @total int) RETURNS numeric(5,2) AS
+BEGIN
+    DECLARE @percentual numeric(5,2)
+    SELECT @percentual = 100.0 * @parte / @total
+    RETURN @percentual
+END
 GO
 
 SET STATISTICS IO ON;
 SET STATISTICS TIME ON;
 GO
 
-DECLARE @hoje date;
-SET @hoje = '2026-11-20';
-
-SELECT  cl.cod_cliente,
-        cl.nome,
-        cl.telefone,
-        COUNT(*)                                     AS parcelas_vencidas,
-        SUM(f.valor)                                 AS valor_devido,
-        DATEDIFF(DAY, MIN(f.data_vencimento), @hoje) AS dias_parcela_mais_antiga,
-        (
-            SELECT COUNT(*)
-            FROM   contratos      AS c2
-            INNER JOIN itens_contrato AS i2 ON i2.cod_contrato = c2.cod_contrato
-            WHERE  c2.cod_cliente = cl.cod_cliente
-              AND  c2.data_devolucao IS NULL
-        )                                            AS equipamentos_em_posse
-FROM    financeiro AS f
-INNER JOIN contratos  AS c  ON c.cod_contrato = f.cod_contrato
-INNER JOIN clientes   AS cl ON cl.cod_cliente = c.cod_cliente
-WHERE   f.data_pagamento IS NULL
-  AND   f.data_vencimento < @hoje
-GROUP BY cl.cod_cliente, cl.nome, cl.telefone
-ORDER BY valor_devido DESC;
+SELECT  fabricante,
+        COUNT(*)                                                   AS total_equipamentos,
+        SUM(CASE WHEN status = 'locado'     THEN 1 ELSE 0 END)     AS locados,
+        SUM(CASE WHEN status = 'manutenção' THEN 1 ELSE 0 END)     AS em_manutencao,
+        SUM(CASE WHEN status = 'disponível' THEN 1 ELSE 0 END)     AS disponiveis,
+        dbo.fn_percentual(SUM(CASE WHEN status = 'locado' THEN 1 ELSE 0 END), COUNT(*)) AS taxa_ocupacao,
+        (SELECT dbo.fn_percentual(SUM(CASE WHEN e2.status = 'locado' THEN 1 ELSE 0 END), COUNT(*))
+         FROM equipamentos AS e2)                                  AS taxa_ocupacao_frota,
+        dbo.fn_percentual(COUNT(*), SUM(COUNT(*)) OVER ())         AS participacao_na_frota
+FROM    equipamentos
+GROUP BY fabricante
+ORDER BY taxa_ocupacao DESC, total_equipamentos DESC;
 GO
 
 SET STATISTICS IO OFF;
